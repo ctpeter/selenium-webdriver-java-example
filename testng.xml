@@ -10,7 +10,7 @@
 	<test name="my hub spot test chrome" parallel="none" thread-count="5">
 		<parameter name="browser" value="chrome" />
 		<classes>
-                        <class name="com.willysalazar.example.utils.BaseTest">    
+                        <class name="com.willysalazar.example.AbTest.java ">    
 		</classes>
 	</test> <!-- End First Test -->
 
