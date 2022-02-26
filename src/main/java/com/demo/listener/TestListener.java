@@ -1,124 +1,69 @@
-//TestListener.java
+package com.listeners;
 
-package com.demo.listener;
-
-import org.apache.commons.lang.exception.ExceptionUtils;
-
-import org.testng.ITestContext;
-
-import org.testng.ITestListener;
-
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import com.demo.utility.JiraCreateIssue;
+import com.util.JiraPolicy;
+import com.util.JiraServiceProvider;
 
-import com.demo.utility.JiraServiceProvider;
+public class TestJiraListener implements ITestListener {
 
+	@Override
+	public void onTestStart(ITestResult result) {
+		// TODO Auto-generated method stub
 
-public class TestListener implements ITestListener {
+	}
 
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		// TODO Auto-generated method stub
 
-    @Override
+	}
 
-    public void onTestFailure(ITestResult result) {
+	@Override
+	public void onTestFailure(ITestResult result) {
 
-        boolean islogIssue = result.getMethod().getConstructorOrMethod().getMethod().getAnnotation(JiraCreateIssue.class).isCreateIssue();
+		JiraPolicy jiraPolicy = result.getMethod().getConstructorOrMethod().getMethod().getAnnotation(JiraPolicy.class);
+		boolean isTicketReady = jiraPolicy.logTicketReady();
+		if (isTicketReady) {
+			// raise jira ticket:
+			System.out.println("is ticket ready for JIRA: " + isTicketReady);
+			JiraServiceProvider jiraSp = new JiraServiceProvider("https://pvc28.atlassian.net",
+					"vientter@gmail.com", "0s9gHp2ymcwH3vmBNH1m153B", "TEST");
+			String issueSummary = result.getMethod().getConstructorOrMethod().getMethod().getName()
+					+ "got failed due to some assertion or exception";
+			String issueDescription = result.getThrowable().getMessage() + "\n";
+			issueDescription.concat(ExceptionUtils.getFullStackTrace(result.getThrowable()));
 
-        if (islogIssue) {
+			jiraSp.createJiraTicket("Bug", issueSummary, issueDescription, "Naveen");
+		}
 
-//Provide proper Jira project URL ex: https://browsertack.atlassian.net 
+	}
 
-//Jira User name ex: browserstack@gmail.com
+	@Override
+	public void onTestSkipped(ITestResult result) {
+		// TODO Auto-generated method stub
 
-//API token copy from Jira dashboard ex: lorelimpusm12uijk
+	}
 
-//Project key should be, Short name ex: BS
+	@Override
+	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+		// TODO Auto-generated method stub
 
+	}
 
-            JiraServiceProvider JiraServiceProvider = new JiraServiceProvider("https://pvc28.atlassian.net/",
+	@Override
+	public void onStart(ITestContext context) {
+		// TODO Auto-generated method stub
 
-                    "vientter@gmail.com", "0s9gHp2ymcwH3vmBNH1m153B", "TEST");
+	}
 
+	@Override
+	public void onFinish(ITestContext context) {
+		// TODO Auto-generated method stub
 
-
-            String issueDescription = "Failure Reason from Automation Testing\n\n" + result.getThrowable().getMessage()
-
-                    + "\n";
-
-            issueDescription.concat(ExceptionUtils.getFullStackTrace(result.getThrowable()));
-
-
-
-
-            String issueSummary = result.getMethod().getConstructorOrMethod().getMethod().getName()
-
-                    + " Failed in Automation Testing";
-
-            
-
-            JiraServiceProvider.createJiraIssue("Bug", issueSummary, issueDescription, "Automated Testing");
-
-        }
-
-    }
-
-    @Override
-
-    public void onTestSkipped(ITestResult result) {
-
-        // TODO Auto-generated method stub
-
-
-
-
-    }
-
-    @Override
-
-    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-
-        // TODO Auto-generated method stub
-
-
-    }
-
-    @Override
-
-    public void onStart(ITestContext context) {
-
-        // TODO Auto-generated method stub
-
-
-    }
-
-
-    @Override
-
-    public void onFinish(ITestContext context) {
-
-        // TODO Auto-generated method stub
-
-
-    }
-
-
-    @Override
-
-    public void onTestStart(ITestResult result) {
-
-        // TODO Auto-generated method stub
-
-
-    }
-
-
-    @Override
-
-    public void onTestSuccess(ITestResult result) {
-
-        // TODO Auto-generated method stub
-
-
-    }
+	}
 
 }
