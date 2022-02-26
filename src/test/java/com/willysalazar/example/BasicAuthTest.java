@@ -15,7 +15,7 @@ private static final Logger LOGGER = LogManager.getLogger();
         String titlePageAuthorized =
                 basicAuthPage.
                     clickLinkBasicAuth().
-                    navigateToBasicAuth("admin", "admin").
+                    navigateToBasicAuth("admin", "test").
                     getTextTitleBasicAuth();
         Assert.assertEquals(titlePageAuthorized, "Basic Auth");
         LOGGER.info("Test Basic Auth successful");
