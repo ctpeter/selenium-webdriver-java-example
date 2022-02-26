@@ -79,11 +79,11 @@
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>net.rcarz</groupId>
-            <artifactId>Jira-client</artifactId> 
-            <version>0.5</version>
-            <scope>compile</scope>
-        </dependency>
+		<!-- https://mvnrepository.com/artifact/net.rcarz/jira-client -->
+		<dependency>
+			<groupId>net.rcarz</groupId>
+			<artifactId>jira-client</artifactId>
+			<version>0.5</version>
+		</dependency>
     </dependencies>
 </project>
