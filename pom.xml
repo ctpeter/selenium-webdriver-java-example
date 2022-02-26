@@ -80,10 +80,10 @@
             <version>${log4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.rcarz</groupId>
-            <artifactId>Jira-client</artifactId>
-            <version>0.5</version>
-            <scope>compile</scope>
+            <groupId>net.rcarz</groupId>
+            <artifactId>Jira-client</artifactId> 
+            <version>0.5</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
