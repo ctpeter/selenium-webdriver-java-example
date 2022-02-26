@@ -1,91 +1,36 @@
-// JiraServiceProvider.java
+package com.util;
 
-package com.demo.utility;
-
-import net.rcarz.Jiraclient.BasicCredentials;
-
-import net.rcarz.Jiraclient.Field;
-
-import net.rcarz.Jiraclient.Issue;
-
-import net.rcarz.Jiraclient.Issue.FluentCreate;
-
-import net.rcarz.Jiraclient.JiraClient;
-
-import net.rcarz.Jiraclient.JiraException;
-
+import net.rcarz.jiraclient.BasicCredentials;
+import net.rcarz.jiraclient.Field;
+import net.rcarz.jiraclient.Issue;
+import net.rcarz.jiraclient.Issue.FluentCreate;
+import net.rcarz.jiraclient.JiraClient;
+import net.rcarz.jiraclient.JiraException;
 
 public class JiraServiceProvider {
 
+	public JiraClient jira;
+	public String project;
 
-     private JiraClient Jira;
+	public JiraServiceProvider(String jiraUrl, String username, String password, String project) {
+		BasicCredentials creds = new BasicCredentials(username, password);
+		jira = new JiraClient(jiraUrl, creds);
+		this.project = project;
+	}
 
-     private String project;
+	public void createJiraTicket(String issueType, String summary, String description, String reporterName) {
 
-     private String JiraUrl;
+		try {
+			FluentCreate fleuntCreate = jira.createIssue(project, issueType);
+			fleuntCreate.field(Field.SUMMARY, summary);
+			fleuntCreate.field(Field.DESCRIPTION, description);
+			Issue newIssue = fleuntCreate.execute();
+			System.out.println("new issue created in jira with ID: " + newIssue);
 
-     public JiraServiceProvider(String JiraUrl, String username, String password, String project) {
+		} catch (JiraException e) {
+			e.printStackTrace();
+		}
 
-         this.JiraUrl=JiraUrl;
-
-         // create basic authentication object
-
-         BasicCredentials creds = new BasicCredentials(username, password);
-
-         // initialize the Jira client with the url and the credentials
-
-         Jira = new JiraClient(JiraUrl, creds);
-
-         this.project = project;
-
-     }
-
-
-    public void createJiraIssue(String issueType, String summary, String description, String reporterName) {
-
-
-
-
-        try {
-
-            //Avoid Creating Duplicate Issue
-
-            Issue.SearchResult sr = Jira.searchIssues("summary ~ \""+summary+"\"");
-
-            if(sr.total!=0) {
-
-                System.out.println("Same Issue Already Exists on Jira");
-
-                return;
-
-            }
-
-            
-
-            //Create issue if not exists
-
-            FluentCreate fleuntCreate = Jira.createIssue(project, issueType);
-
-            fleuntCreate.field(Field.SUMMARY, summary);
-
-            fleuntCreate.field(Field.DESCRIPTION, description);
-
-            Issue newIssue = fleuntCreate.execute();
-
-            System.out.println("********************************************");
-
-            System.out.println("New issue created in Jira with ID: " + newIssue);
-
-            System.out.println("New issue URL is :"+JiraUrl+"/browse/"+newIssue);
-
-            System.out.println("*******************************************");
-
-        } catch (JiraException e) {
-
-            e.printStackTrace();
-
-        }
-
-    }
+	}
 
 }
